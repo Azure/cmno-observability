@@ -1,6 +1,22 @@
 # Alerts for Azure Landing Zone
 
-One of the most common questions we've faced in working with Customers is, "What should we monitor in Azure?"
+One of the most common questions we've faced in working with Customers is, "What should we monitor in Azure?" and "What thresholds should we configure our alerts for?"
+
+There hasn't been a definitive list of what you should monitor when you deploy something to Azure but the documentation for each Azure resource does a pretty good job of providing some recommendations, some of those recommedations are short simple metric queries, some are slightly more complex log alerts and sometimes there's a lot to read through such as with [Storage Accounts](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-storage-monitoring-scenarios). Microsoft has also create a number of 'insight solutions' which pull together all the things you shoudl carea about for some resources ([Storage Insights](https://learn.microsoft.com/en-us/azure/storage/common/storage-insights-overview), [VM Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-overview), [Container Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-overview)); but what about everything else???
+
+We approached this task by first focusing on monitoring the most common Azure resources found in Azure Landing zones because their pretty standard.
+
+Do you need to have Azure Landing zones deployed for this to work?
+
+*No but you will need to be using Azure Management groups.*
+
+Do you need to use the thresholds we've defined in the metric rule alert?
+
+*It's provided as a starting point, we've based the initial threshold on what we've seen and what Microsoft's documentation recommends. You will need to adjust the thresholds at some point. You'll need to observe and if the alert is too chatty, adjust the threshold up; if it's not alerting when there's a problem, adjust the threshold down a bit. The key thing is you'll need to investigate, leverage the insights if they are available, or create a workbook or dashboard to help you out.*
+
+Do we need to use these metrics or can we replace them with other ones?
+
+*The metric rules we've created are based on recommendations from Microsoft documentation and field exprience. How you're using Azure resources may also be different so tailor the alerts to suit your needs. One of the other goals of this project is to help you have a way to do Azure Monitor alerts at scale, create new rules with your own thresholds. We'd love to hear about your new rules too so feel free to share back.*
 
 ## Dependencies
 
