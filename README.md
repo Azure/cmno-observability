@@ -33,7 +33,7 @@ Identify platform metrics we think you should care about.
 Next, what Service Health Alerts for resources that are important to us.
 After that, what log alerts should be used.
 
-![Layers](./media/Layers.png)
+![Monitoring Layers](.github\media\Layers.png)
 
 The next challenge we've faced is how do you do this at scale in a repeatable way? To be honest there weren't a lot of examples available on how to do this, even if you used Infrastructure-as-Code, each person had their own way of doing things, let's develop a common deployment method that if someone is just starting out and don't have the experience they can get up and running with a scaleable method to deploy Azure Monitor alerts.
 
@@ -59,9 +59,7 @@ This project uses the bicep modules from the [CARML](https://github.com/Azure/Re
 
 ## Roadmap
 
-Going back to our layered approach we dediced to
-
-Our approach was to first tackle creating Metric alerts because they are responsive and alerts are relatively inexpensive because it's pre-computed and stored in the system, where as log alerts are stored in a Log Analytics Workspace and have had some sort of logic operation performed on the data. Click [here](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-types#metric-alerts) for more information on Metric alerts.
+Going back to our layered approach we dediced to first tackle creating Metric alerts because they are responsive and alerts are relatively inexpensive because it's pre-computed and stored in the system, where as log alerts are stored in a Log Analytics Workspace and have had some sort of logic operation performed on the data. Click [here](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-types#metric-alerts) for more information on Metric alerts.
 
 Next we're going to tackle Service Health alerts, knowing when there's an outage, planned maintenance and other health advisories for the services you're using. These types of alerts rely on information in the ActivityLog. Click [here](https://learn.microsoft.com/en-us/azure/service-health/overview) for more information on Service Health Alerts.
 
@@ -73,15 +71,20 @@ The final area we're going to tackle is log alerts and as stated earlier the dat
 
 ## Prerequisites
 
-VSCode
-Bicep Extension
-Azure subscriptions where you want to apply alerts.
-Management Groups that manage the Azure subscriptions
-...
+- VSCode
+- Bicep Extension
+- Azure subscriptions where you want to apply alerts.
+- Management Groups that manage the Azure subscriptions
+- Azure CLI
+- Azure PowerShell (optional if you wanto use it to deploy the code.)
 
-## Deployment Steps
+## Metric Alert Policy Deployment Steps
 
 The intention of the policies is to provide a common set of metrics and thresholds to monitor all Azure Landing Zone resources which is why you will want to deploy this as high up in your Azure Management group structure to ensure that all subscriptions are included and the steps below will cover that specific scenario. If there are other scenarios you'd like to see or have applied the policies at a different level within your Azure Management group structure send us feedback through GitHub Issues. <<Link>>
+
+1. Update the parameters.json to suit your management group
+2. Login to the subscription you want to deploy the metric alerts to.
+3.
 
 ## Contributing
 
