@@ -2,17 +2,52 @@
 
 One of the most common questions we've faced in working with Customers is, "What should we monitor in Azure?" and "What thresholds should we configure our alerts for?"
 
-There hasn't been a definitive list of what you should monitor when you deploy something to Azure but the documentation for each Azure resource does a pretty good job of providing some recommendations, some of those recommedations are short simple metric queries, some are slightly more complex log alerts and sometimes there's a lot to read through such as with [Storage Accounts](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-storage-monitoring-scenarios). Microsoft has also create a number of 'insight solutions' which pull together all the things you shoudl carea about for some resources ([Storage Insights](https://learn.microsoft.com/en-us/azure/storage/common/storage-insights-overview), [VM Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-overview), [Container Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-overview)); but what about everything else???
+We started thinking about our experiences on our customer projects where we were working with them to establish how they would manage their Azure Landing Zones, eventually we'd come to the age old question, "What should we monitor?" and "What thresholds should we set?"
 
-We approached this task by first focusing on monitoring the most common Azure resources found in Azure Landing zones because their pretty standard.
+There isn't definitive list of what you should monitor when you deploy something to Azure because "it depends", on what services you're using and how the services are used which will dictate what you should monitor and what thresholds the metrics you do decide to collect are and what errors you should alert on in logs.
+
+Microsoft has tried to address this by providing a number of 'insights or solutions' for popular services which pull together all the things you should care about ([Storage Insights](https://learn.microsoft.com/en-us/azure/storage/common/storage-insights-overview), [VM Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-overview), [Container Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-overview)); but what about everything else???
+
+Let's reduce the list of what we should monitor to something a bit more manageable... Let's look at the Azure Landing Zone. It's a common set of Azure resources/services that are configured in a similar way across organizations. (Of course there will be exceptions but we'll get to that.)
+
+ What you should monitor are the key components of your Azure Landing Zones within the Platform/Shared landing zones and the pieces which stretch into application or workload subscriptions and then add monitoring to the resources which use those landing zone components.
+
+ Example:
+
+  -Storage Accounts
+  -ASR Vaults
+  -VNETs and subnets
+  -Log Analytics workspace/s
+  -DNS
+  -Azure Firewall or 3rd Party NVA (Note: we won't be providing guidance on 3rd Party NVA monitoring, NVA vendors are in the best position to provide you that)
+  -Key Vaults
+
+ As for what thresholds should be set we should set?
+
+ Look to the documentation Microsoft has provided for the Azure resources, there's a wealth of information to get you started, some of those recommedations are short simple metric queries, some are slightly more complex log alerts and sometimes there's a lot to read through such as with [Storage Accounts](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-storage-monitoring-scenarios).
+
+ An important part that's missed often is Service Health alerts, getting those can save you a lot of headaches and needless troubleshooting if you know first that there's an issue with the Azure resource service and not how you're using it.
+
+We also thought to look at this using a layered approach within Azure Landing Zone.
+Identify platform metrics we think you should care about.
+Next, what Service Health Alerts for resources that are important to us.
+After that, what log alerts should be used.
+
+![Layers](./media/Layers.png)
+
+The next challenge we've faced is how do you do this at scale in a repeatable way? To be honest there weren't a lot of examples available on how to do this, even if you used Infrastructure-as-Code, each person had their own way of doing things, let's develop a common deployment method that if someone is just starting out and don't have the experience they can get up and running with a scaleable method to deploy Azure Monitor alerts.
+
+If you have a way to deploy Azure Monitor alerts but struggle determining what to monitor and what thresholds to set, you can use the thresholds here for your Azure Landing zones.
 
 Do you need to have Azure Landing zones deployed for this to work?
 
-*No but you will need to be using Azure Management groups.*
+*No but you will need to be using Azure Management groups and for now our focus is on the resources frequently deployed as part of Azure Landing Zone deployments.*
 
 Do you need to use the thresholds we've defined in the metric rule alert?
 
-*It's provided as a starting point, we've based the initial threshold on what we've seen and what Microsoft's documentation recommends. You will need to adjust the thresholds at some point. You'll need to observe and if the alert is too chatty, adjust the threshold up; if it's not alerting when there's a problem, adjust the threshold down a bit. The key thing is you'll need to investigate, leverage the insights if they are available, or create a workbook or dashboard to help you out.*
+*It's provided as a starting point, we've based the initial threshold on what we've seen and what Microsoft's documentation recommends. You will need to adjust the thresholds at some point.*
+
+*You will need to observe and if the alert is too chatty, adjust the threshold up; if it's not alerting when there's a problem, adjust the threshold down a bit, (or vice-versa depending on what metric or log error is being used as a monitoring source). The key thing is you'll need to investigate, leverage the insights if they are available, or create a workbook or dashboard to help you out.*
 
 Do we need to use these metrics or can we replace them with other ones?
 
@@ -23,6 +58,8 @@ Do we need to use these metrics or can we replace them with other ones?
 This project uses the bicep modules from the [CARML](https://github.com/Azure/ResourceModules), version [0.7.0](https://github.com/Azure/ResourceModules/releases/tag/v0.7.0). We will work to keep this as compatible with the [CARML](https://github.com/Azure/ResourceModules) repo but for the moment our priority is to build this project up as much as possible so things may break if you use a more current version of the Bicep modules found in [CARML](https://github.com/Azure/ResourceModules).
 
 ## Roadmap
+
+Going back to our layered approach we dediced to
 
 Our approach was to first tackle creating Metric alerts because they are responsive and alerts are relatively inexpensive because it's pre-computed and stored in the system, where as log alerts are stored in a Log Analytics Workspace and have had some sort of logic operation performed on the data. Click [here](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-types#metric-alerts) for more information on Metric alerts.
 
