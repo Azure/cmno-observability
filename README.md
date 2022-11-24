@@ -1,5 +1,17 @@
 # Alerts for Azure Landing Zone
 
+<!-- vscode-markdown-toc -->
+* [Dependencies](#Dependencies)
+* [Roadmap](#Roadmap)
+* [Prerequisites](#Prerequisites)
+* [Metric Alert Policy Deployment Steps](#MetricAlertPolicyDeploymentSteps)
+
+<!-- vscode-markdown-toc-config
+	numbering=false
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
 One of the most common questions we've faced in working with Customers is, "What should we monitor in Azure?" and "What thresholds should we configure our alerts for?"
 
 We started thinking about our experiences on our customer projects where we were working with them to establish how they would manage their Azure Landing Zones, eventually we'd come to the age old question, "What should we monitor?" and "What thresholds should we set?"
@@ -53,11 +65,11 @@ Do we need to use these metrics or can we replace them with other ones?
 
 *The metric rules we've created are based on recommendations from Microsoft documentation and field exprience. How you're using Azure resources may also be different so tailor the alerts to suit your needs. One of the other goals of this project is to help you have a way to do Azure Monitor alerts at scale, create new rules with your own thresholds. We'd love to hear about your new rules too so feel free to share back.*
 
-## Dependencies
+## <a name='Dependencies'></a>Dependencies
 
 This project uses the bicep modules from the [CARML](https://github.com/Azure/ResourceModules), version [0.7.0](https://github.com/Azure/ResourceModules/releases/tag/v0.7.0). We will work to keep this as compatible with the [CARML](https://github.com/Azure/ResourceModules) repo but for the moment our priority is to build this project up as much as possible so things may break if you use a more current version of the Bicep modules found in [CARML](https://github.com/Azure/ResourceModules).
 
-## Roadmap
+## <a name='Roadmap'></a>Roadmap
 
 Going back to our layered approach we dediced to first tackle creating Metric alerts because they are responsive and alerts are relatively inexpensive because it's pre-computed and stored in the system, where as log alerts are stored in a Log Analytics Workspace and have had some sort of logic operation performed on the data. Click [here](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-types#metric-alerts) for more information on Metric alerts.
 
@@ -65,26 +77,28 @@ Next we're going to tackle Service Health alerts, knowing when there's an outage
 
 The final area we're going to tackle is log alerts and as stated earlier the data is collected in a Log Analytics Workspace and some sort of logic operation is performed on the data which means there's charge for using these types of alerts.
 
-- Where possible we're going to focus on queries which use the [ScheduledQueryRules API](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-log-api-switch) and [Metric alerts for Logs](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-metric-logs).
+* Where possible we're going to focus on queries which use the [ScheduledQueryRules API](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-log-api-switch) and [Metric alerts for Logs](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-metric-logs).
 
-- ActivityLog alerts we may create additional alerts based on data found in the ActivityLog Alerts that are not Service Health related.
+* ActivityLog alerts we may create additional alerts based on data found in the ActivityLog Alerts that are not Service Health related.
 
-## Prerequisites
+## <a name='Prerequisites'></a>Prerequisites
 
-- VSCode
-- Bicep Extension
-- Azure subscriptions where you want to apply alerts.
-- Management Groups that manage the Azure subscriptions
-- Azure CLI
-- Azure PowerShell (optional if you wanto use it to deploy the code.)
+* VSCode
+* Bicep Extension
+* Azure subscriptions where you want to apply alerts.
+* Management Groups that manage the Azure subscriptions
+* Must have [permission](https://learn.microsoft.com/en-us/azure/governance/policy/overview#azure-rbac-permissions-in-azure-policy) to assign policy initiatives/defintions to management groups
+* Azure CLI
+* Azure PowerShell (optional if you want to use it to deploy the code.)
 
-## Metric Alert Policy Deployment Steps
+## <a name='MetricAlertPolicyDeploymentSteps'></a>Metric Alert Policy Deployment Steps
 
 The intention of the policies is to provide a common set of metrics and thresholds to monitor all Azure Landing Zone resources which is why you will want to deploy this as high up in your Azure Management group structure to ensure that all subscriptions are included and the steps below will cover that specific scenario. If there are other scenarios you'd like to see or have applied the policies at a different level within your Azure Management group structure send us feedback through GitHub Issues. <<Link>>
 
-1. Update the parameters.json to suit your management group
+1. Update the parameters.json to suit your environment.
 2. Login to the subscription you want to deploy the metric alerts to.
-3.
+3. From the Azure CLI type:
+```az deployment mg create --name <'ManagementGroupName'> --location <'EastUS'> --management-group-id <'ManagementGroupName'> --template c:\\azuredeploy.json --parameters @parameters.json```
 
 ## Contributing
 
